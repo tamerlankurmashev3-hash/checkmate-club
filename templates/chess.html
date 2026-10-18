@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f3ef"><title>Checkmate Club — Chess, at your pace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='chess.css') }}">
+</head>
+<body>
+  <header class="site-header"><a class="brand" href="/"><span class="brand-symbol">♞</span> checkmate<span class="brand-light">club</span></a><nav class="top-links"><a href="#play">Play</a><a href="#how">How to play</a></nav></header>
+  <main class="layout" id="play">
+    <section class="game-area">
+      <div class="game-head"><div class="head-copy"><div class="eyebrow"><span class="live-dot"></span> A LITTLE FRIENDLY COMPETITION</div><h1>Make your <em>next move.</em></h1><p>Play a quick game, learn a tactic, or just enjoy the board.</p></div><button class="icon-button flip-button" id="flipButton" aria-label="Flip board" title="Flip board">⇅</button></div>
+      <div class="mode-strip" role="tablist" aria-label="Game mode"><button class="mode-tab active" data-mode="computer">♟ <span>Play computer</span></button><button class="mode-tab" data-mode="local">♙ <span>Two players</span></button><button class="mode-tab" data-mode="online">↗ <span>Play a friend</span></button><button class="mode-tab" data-mode="puzzle">✦ <span>Puzzles</span></button></div>
+      <div class="play-grid">
+        <div class="board-column">
+          <div class="player-bar opponent-bar"><div class="player-person"><span class="player-avatar bot">♞</span><div><b id="opponentName">The computer</b><small id="opponentDetail">Ready for a game?</small></div></div><span class="clock" id="blackClock">10:00</span></div>
+          <div class="board-wrap"><div class="board" id="board" role="grid" aria-label="Chess board"></div><div class="promotion-shade" id="promotionShade" hidden><div class="promotion-card"><b>Promote your pawn</b><div id="promotionChoices"></div></div></div><div class="result-shade" id="resultShade" hidden><div class="result-card"><span class="result-spark">✦</span><h2 id="resultTitle">Game over</h2><p id="resultText"></p><button class="primary-button" id="playAgain">Play again</button></div></div></div>
+          <div class="player-bar self-bar"><div class="player-person"><span class="player-avatar you">Y</span><div><b id="selfName">You · White</b><small id="turnLabel">Your move</small></div></div><span class="clock active-clock" id="whiteClock">10:00</span></div>
+          <div class="board-actions"><button class="soft-button" id="newGameButton">↻ New game</button><button class="soft-button" id="undoButton">↶ Undo</button><button class="soft-button" id="drawButton">½ Offer draw</button><button class="soft-button danger-link" id="resignButton">Resign</button></div>
+        </div>
+        <aside class="side-panel">
+          <section class="panel game-settings" id="settingsPanel"><div class="panel-heading"><div><div class="eyebrow muted">SET UP YOUR GAME</div><h2 id="modeTitle">Play the computer</h2></div><span class="setting-icon">⚙</span></div>
+            <label id="difficultyRow">Difficulty<select id="difficulty"><option value="easy">Easy · learning</option><option value="medium" selected>Medium · thoughtful</option><option value="hard">Hard · challenging</option></select></label>
+            <label id="colorRow">Play as<select id="playerColor"><option value="w">White</option><option value="b">Black</option></select></label>
+            <label>Time control<select id="timeControl"><option value="untimed">No clock</option><option value="3+2">Blitz · 3 min + 2 sec</option><option value="5+0">Quick · 5 min</option><option value="10+0" selected>Rapid · 10 min</option><option value="15+10">Classic · 15 min + 10 sec</option></select></label>
+            <button class="primary-button full" id="startButton">Start a game <span>→</span></button>
+          </section>
+          <section class="panel online-panel" id="onlinePanel" hidden><div class="panel-heading"><div><div class="eyebrow muted">PLAY TOGETHER ONLINE</div><h2>Invite a friend</h2></div><span class="setting-icon">↗</span></div>
+            <label>Your name<input id="onlineName" maxlength="20" value="Player 1" autocomplete="nickname"></label>
+            <button class="primary-button full" id="createRoomButton">Create a game link <span>→</span></button>
+            <div class="invite-share" id="inviteShare" hidden><label>Share this invite link<input id="inviteLink" readonly></label><button class="soft-button" id="copyInviteButton">Copy invite link</button><p id="roomWaiting">Waiting for your friend to join…</p></div>
+            <div class="join-divider"><span>OR JOIN A FRIEND</span></div>
+            <label>Room code<input id="roomCodeInput" maxlength="6" placeholder="Enter 6-character code" autocomplete="off"></label>
+            <button class="soft-button join-room-button" id="joinRoomButton">Join game</button>
+            <p class="online-note">Games are live while both players are connected. Online games use no clock.</p>
+          </section>
+          <section class="panel puzzle-panel" id="puzzlePanel" hidden><div class="panel-heading"><div><div class="eyebrow muted">DAILY TACTIC</div><h2>Find the winning move</h2></div><span class="setting-icon">✦</span></div><p id="puzzlePrompt">White to move. Can you find checkmate in one?</p><div class="puzzle-progress"><span>PUZZLE</span><b id="puzzleNumber">01 / 03</b></div><button class="primary-button full" id="newPuzzleButton">Another puzzle <span>→</span></button><button class="text-button" id="hintButton">Need a hint?</button></section>
+          <section class="panel moves-panel"><div class="panel-heading moves-heading"><div><div class="eyebrow muted">THIS GAME</div><h2>Move history</h2></div><button class="icon-button small" id="copyPgn" title="Copy moves">⧉</button></div><div class="moves-list" id="movesList"><div class="empty-moves"><span>♘</span><br>Your first move is waiting.</div></div><div class="moves-foot"><span class="turn-dot"></span><span id="statusLine">White to move</span></div></section>
+        </aside>
+      </div>
+    </section>
+    <aside class="right-rail"><div class="rail-card welcome-card"><div class="small-crown">♛</div><div class="eyebrow muted">WELCOME TO THE CLUB</div><h2>Chess is better<br><em>when you play.</em></h2><p>No pressure. Just you, the board, and whatever move feels right.</p></div><div class="rail-card tip-card" id="how"><div class="tip-head"><span>♧</span><span class="eyebrow muted">QUICK TIP</span></div><p id="tipText">Control the center early. Your pieces have more room to move from the middle.</p><button id="nextTip">Another tip <span>→</span></button></div><div class="rail-footer"><span class="tiny-board">♙</span><span>Thoughtful moves. Good company.</span></div></aside>
+  </main>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" crossorigin="anonymous"></script><script src="{{ url_for('static', filename='chess-engine.js') }}"></script><script src="{{ url_for('static', filename='chess-app.js') }}"></script>
+</body></html>
